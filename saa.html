@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Säätiedot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .weather-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .weather-box {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+            width: 45%;
+        }
+        .weather-box img {
+            margin-top: 10px;
+        }
+        .nav-button {
+            margin-bottom: 20px;
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #0056b3;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .nav-button:hover {
+            background-color: #003d80;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigointinappi takaisin index.html-sivulle -->
+    <a href="index.html" class="nav-button">Takaisin pääsivulle</a>
+
+    <h1>Sää - siitä aina on jotain kerrottavaa</h1>
+    <p>Millainen sää Helsingissä on? Entä Tampereella?</p>
+    <div id="vastaus" class="weather-container">
+        <!-- Säätiedot tulevat tähän -->
+    </div>
+
+    <script>
+        const apiKey = '314de1b8dabfbace7321a5ff474e27d1'; // Käytetään opettajan key-koodia
+
+        function haeSaa(kaupunki) {
+            fetch(`https://api.openweathermap.org/data/2.5/weather?lang=fi&q=${kaupunki}&units=metric&APPID=${apiKey}`)
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(responseJson) {
+                saa(responseJson);
+            })
+            .catch(function(error) {
+                document.getElementById("vastaus").innerHTML = "<p>Tietoa ei pystytä hakemaan</p>";
+            });
+        }
+
+        function saa(data) {
+            var teksti = "<div class='weather-box'>";
+            teksti += "<h2>" + data.name + "</h2>";
+            teksti += "<ul>";
+            teksti += "<li>kaupunki: " + data.name + "</li>";
+            teksti += "<li>kuvaus: " + data.weather[0].description + "</li>";
+            teksti += "<li>lämpötila: " + data.main.temp + "&deg;C</li>";
+            teksti += "<li>tuulen nopeus: " + data.wind.speed + " m/s</li>";
+            teksti += "</ul>";
+            var kuva = 'http://openweathermap.org/img/w/' + data.weather[0].icon + '.png';
+            teksti += "<img src='" + kuva + "' alt='kuva' >";
+            teksti += "</div>";
+
+            document.getElementById("vastaus").innerHTML += teksti;
+        }
+
+        // Haetaan säätiedot molemmille kaupungeille
+        haeSaa('Tampere');
+        haeSaa('Helsinki');
+    </script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tampereen tapahtumat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .nav-button {
+            margin-bottom: 20px;
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #0056b3;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .nav-button:hover {
+            background-color: #003d80;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigointinappi takaisin index.html-sivulle -->
+    <a href="index.html" class="nav-button">Takaisin pääsivulle</a>
+
+    <div id="vastaus">
+        <p>Ladataan tapahtumia...</p>
+    </div>
+
+    <script>
+        // Fetch kutsu tapahtumien hakemiseksi
+        fetch('https://api.visittampere.com/api/v1/visittampere/event/published/all/?format=json&lang=fi')
+        .then(function(response) {
+            return response.json(); // Muunnetaan vastaus JSON-muotoon
+        })
+        .then(function(responseJson) {
+            tapahtumat(responseJson); // Kutsutaan tapahtumat-funktiota ja välitetään json-vastaus
+        })
+        .catch(function(error) {
+            document.getElementById("vastaus").innerHTML = "<p>Tietoa ei pystytä hakemaan </p>" + error;
+        });
+
+        // Funktio tapahtumien näyttämiseksi
+        function tapahtumat(data) {
+            var teksti = "<h1>Tampereella tapahtuu</h1>";
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].title) {
+                    teksti += "<h3>" + data[i].title + "</h3>";
+                } else {
+                    teksti += "<h3>(Nimeä ei saatavilla)</h3>";
+                }
+
+                if (data[i].description) {
+                    teksti += "<p>" + data[i].description + "</p>";
+                } else {
+                    teksti += "<p>(Kuvausta ei saatavilla)</p>";
+                }
+
+                if (data[i].url) {
+                    teksti += "<p> <a href='" + data[i].url + "' target='_blank'>" + data[i].url + "</a></p>";
+                } else {
+                    teksti += "<p>(Linkkiä ei saatavilla)</p>";
+                }
+            }
+            document.getElementById("vastaus").innerHTML = teksti;
+        }
+    </script>
+</body>
+</html>
