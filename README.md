@@ -26,7 +26,7 @@ Jokaisella sivulla on navigointinapit, jotka mahdollistavat helpon siirtymisen s
 - **OpenWeatherMap API**: Säätietojen hakemiseen.
 - **VisitTampere API**: Tampereen tapahtumatietojen hakemiseen.
 
-## Asennus ja Käyttö
+## Käyttö
 
 1. Avaa `index.html` selaimessa aloittaaksesi.
 2. Navigoi sivuston eri osioihin käyttämällä aloitussivun nappeja.
